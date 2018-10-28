@@ -20,7 +20,9 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
@@ -119,16 +121,24 @@ public class ProductServiceTest {
         productCount.setCount(1);
         productCount.setProduct(productEntity);
 
+        List<ProductCount> productCounts = new ArrayList<>();
+        productCounts.add(productCount);
+
         Order order = Order.builder().orderId(100L)
                 .orderTotal(new BigDecimal(100))
                 .currency("USD")
-                .products(Arrays.asList(productCount)).build();
+                .products(productCounts).build();
 
-        when(orderRepository.findByProductsProductId(productEntity.getId())).thenReturn(Arrays.asList(order));
+        List<Order> orders = new ArrayList<>();
+        orders.add(order);
 
+        when(orderRepository.findByProductsProductId(productEntity.getId())).thenReturn(orders);
         productService.deleteProduct(product.getSku());
 
-        verify(productRepository, times(1)).deleteById(productEntity.getId());
+        when(orderRepository.findByProductsProductId(productEntity.getId())).thenReturn(null);
+        productService.deleteProduct(product.getSku());
+
+        verify(productRepository, times(2)).deleteById(productEntity.getId());
         verify(applicationEventPublisher, times(1)).publishEvent(Mockito.any());
 
         productService.deleteProduct(null);

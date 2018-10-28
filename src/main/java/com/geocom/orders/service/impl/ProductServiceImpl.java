@@ -82,13 +82,20 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public void deleteProduct(String sku) {
         Product product = findProduct(sku);
         List<Order> orders = orderRepository.findByProductsProductId(product.getId());
         productRepository.deleteById(product.getId());
         if(!CollectionUtils.isEmpty(orders)) {
+            orders.forEach(order -> removeProductAndSaveOrder(order, product));
             dispatchRecalculateOrdersEvent(orders.stream().map(Order::getOrderId).collect(Collectors.toList()));
         }
+    }
+
+    private void removeProductAndSaveOrder(Order order, Product product) {
+        order.removeProduct(product);
+        orderRepository.save(order);
     }
 
     private void dispatchRecalculateOrdersEvent(List<Long> orderIds) {

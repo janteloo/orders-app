@@ -41,7 +41,7 @@ public class OrdersApplication implements ApplicationRunner {
 		if(sequenceCounterRepository.findByName(sequenceName) == null) {
 			SequenceCounter sequenceCounter = new SequenceCounter();
 			sequenceCounter.setName(sequenceName);
-			sequenceCounter.setSequence(10L);
+			sequenceCounter.setSequence(0L);
 			sequenceCounterRepository.save(sequenceCounter);
 		}
 	}
