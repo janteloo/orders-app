@@ -13,6 +13,7 @@ import com.geocom.orders.model.Product;
 import com.geocom.orders.repository.OrderRepository;
 import com.geocom.orders.service.OrderService;
 import com.geocom.orders.util.ApplicationUtil;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

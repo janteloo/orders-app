@@ -4,10 +4,8 @@ import com.geocom.orders.api.ProductDTO;
 import com.geocom.orders.api.UpdateProductDTO;
 import com.geocom.orders.mapper.Mapper;
 import com.geocom.orders.model.Product;
-import com.geocom.orders.model.SequenceCounter;
 import com.geocom.orders.repository.ProductRepository;
 import com.geocom.orders.repository.SequenceCounterRepository;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +15,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
@@ -26,6 +25,7 @@ import java.util.Optional;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@TestPropertySource(locations = "classpath:test.properties")
 public class ProductApiTest {
 
     @LocalServerPort
@@ -35,21 +35,10 @@ public class ProductApiTest {
     private TestRestTemplate restTemplate;
 
     @Autowired
-    private SequenceCounterRepository sequenceCountRepository;
-
-    @Autowired
     private ProductRepository productRepository;
 
     @Autowired
     private Mapper objectMapper;
-
-    @Before
-    public void setup() {
-        SequenceCounter sequenceCounter = new SequenceCounter();
-        sequenceCounter.setName("order_id");
-        sequenceCounter.setSequence(0L);
-        sequenceCountRepository.save(sequenceCounter);
-    }
 
     @Test
     public void createProduct(){

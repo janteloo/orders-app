@@ -11,6 +11,7 @@ import com.geocom.orders.model.Order;
 import com.geocom.orders.model.Product;
 import com.geocom.orders.repository.OrderRepository;
 import com.geocom.orders.util.ApplicationUtil;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,8 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
     private OrderRepository orderRepository;
     private MessageConfiguration message;
+
+    private final Logger logger = Logger.getLogger(ProductServiceImpl.class);
 
     @Autowired
     public ProductServiceImpl(ApplicationEventPublisher applicationEventPublisher,
@@ -89,6 +92,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private void dispatchRecalculateOrdersEvent(List<Long> orderIds) {
+        logger.info("Dispatching event to recalculate orders");
         RecalculateOrdersEvent event = new RecalculateOrdersEvent(this, orderIds);
         applicationEventPublisher.publishEvent(event);
     }

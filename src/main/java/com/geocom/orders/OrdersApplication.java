@@ -38,10 +38,10 @@ public class OrdersApplication implements ApplicationRunner {
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 		String sequenceName = "order_id";
-		if(sequenceCounterRepository.findByName(sequenceName) != null) {
+		if(sequenceCounterRepository.findByName(sequenceName) == null) {
 			SequenceCounter sequenceCounter = new SequenceCounter();
 			sequenceCounter.setName(sequenceName);
-			sequenceCounter.setSequence(0L);
+			sequenceCounter.setSequence(10L);
 			sequenceCounterRepository.save(sequenceCounter);
 		}
 	}
